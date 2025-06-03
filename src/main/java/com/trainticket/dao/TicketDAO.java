@@ -13,7 +13,29 @@ import com.trainticket.model.Ticket;
 import com.trainticket.util.DBUtil;
 
 public class TicketDAO {
-
+	public int getTicketsSoldToday() {
+	    Connection conn = null;
+	    PreparedStatement stmt = null;
+	    ResultSet rs = null;
+	    int count = 0;
+	    
+	    try {
+	        conn = DBUtil.getConnection();
+	        String sql = "SELECT COUNT(*) FROM tickets WHERE DATE(booking_date) = CURRENT_DATE";
+	        stmt = conn.prepareStatement(sql);
+	        rs = stmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        DBUtil.closeResources(conn, stmt, rs);
+	    }
+	    
+	    return count;
+	}
     public Ticket getTicketById(int ticketId) {
         Ticket ticket = null;
         Connection conn = null;

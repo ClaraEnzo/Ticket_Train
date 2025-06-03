@@ -19,7 +19,29 @@ public class JourneyDAO {
 
     private TrainDAO trainDAO = new TrainDAO();
     private StationDAO stationDAO = new StationDAO();
-
+    public int getActiveTrainsCount() {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int count = 0;
+        
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "SELECT COUNT(*) FROM trains WHERE status = 'ACTIVE'";
+            stmt = conn.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.closeResources(conn, stmt, rs);
+        }
+        
+        return count;
+    }
     public Journey getJourneyById(int journeyId) {
         Journey journey = null;
         Connection conn = null;

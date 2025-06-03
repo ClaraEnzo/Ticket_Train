@@ -96,46 +96,76 @@ public class StationDAO {
     }
 
     public boolean addStation(Station station) {
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(
-                     "INSERT INTO stations (name, city, is_active) VALUES (?, ?, ?)")) {
-            pstmt.setString(1, station.getName());
-            pstmt.setString(2, station.getCity());
-            pstmt.setBoolean(3, station.isActive());
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean success = false;
+        
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "INSERT INTO stations (name, city, address, is_active) VALUES (?, ?, ?, ?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, station.getName());
+            stmt.setString(2, station.getCity());
+            stmt.setString(3, station.getAddress());
+            stmt.setBoolean(4, station.isActive());
+            
+            int rowsAffected = stmt.executeUpdate();
+            success = rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+        } finally {
+            DBUtil.closeResources(conn, stmt, null);
         }
+        
+        return success;
     }
 
     public boolean updateStation(Station station) {
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(
-                     "UPDATE stations SET name = ?, city = ?, is_active = ? WHERE id = ?")) {
-            pstmt.setString(1, station.getName());
-            pstmt.setString(2, station.getCity());
-            pstmt.setBoolean(3, station.isActive());
-            pstmt.setInt(4, station.getId());
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean success = false;
+        
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "UPDATE stations SET name = ?, city = ?, address = ?, is_active = ? WHERE station_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, station.getName());
+            stmt.setString(2, station.getCity());
+            stmt.setString(3, station.getAddress());
+            stmt.setBoolean(4, station.isActive());
+            stmt.setInt(5, station.getStationId());
+            
+            int rowsAffected = stmt.executeUpdate();
+            success = rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+        } finally {
+            DBUtil.closeResources(conn, stmt, null);
         }
+        
+        return success;
     }
 
-    public boolean deleteStation(int id) {
-        try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM stations WHERE id = ?")) {
-            pstmt.setInt(1, id);
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+    public boolean deleteStation(int stationId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        boolean success = false;
+        
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "DELETE FROM stations WHERE station_id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, stationId);
+            
+            int rowsAffected = stmt.executeUpdate();
+            success = rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+        } finally {
+            DBUtil.closeResources(conn, stmt, null);
         }
+        
+        return success;
     }
 
     private void closeResources(Connection conn, Statement stmt, ResultSet rs) {

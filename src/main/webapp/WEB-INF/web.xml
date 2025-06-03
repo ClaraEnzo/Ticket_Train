@@ -16,13 +16,11 @@
         <session-timeout>30</session-timeout>
     </session-config>
     
-    <!-- Dashboard Servlet -->
-    <servlet>
-        <servlet-name>DashboardServlet</servlet-name>
-        <servlet-class>com.trainticket.controller.DashboardServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DashboardServlet</servlet-name>
-        <url-pattern>/dashboard</url-pattern>
-    </servlet-mapping>
+    <!-- COMMENTÉ TEMPORAIREMENT
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/views/error.jsp</location>
+    </error-page>
+    -->
+    
 </web-app>

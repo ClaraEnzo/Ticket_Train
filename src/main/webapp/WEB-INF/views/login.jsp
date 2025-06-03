@@ -12,9 +12,6 @@
     <jsp:include page="/WEB-INF/views/common/header.jsp" />
     
     <div class="container mt-5">
-        <div class="row
-
-    <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">

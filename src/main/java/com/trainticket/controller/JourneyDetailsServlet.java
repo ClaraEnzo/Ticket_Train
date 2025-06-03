@@ -101,7 +101,7 @@ public class JourneyDetailsServlet extends HttpServlet {
             }
 
             // Create and save ticket
-            boolean success = ticketDAO.addTicket(user.getId(), journeyId, seatNumber,
+            boolean success = ticketDAO.addTicket(user.getUserId(), journeyId, seatNumber,
                                                    passengerName, passengerAge);
 
             if (success) {

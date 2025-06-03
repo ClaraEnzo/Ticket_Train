@@ -1,293 +1,323 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Train Ticket System</title>
+    <title>Tableau de Bord - Train Ticket System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #2980b9;
         }
         
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            line-height: 1.6;
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        .header {
-            background-color: #2c3e50;
+        .dashboard-header {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
         
-        .nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-        
-        .nav-links a:hover {
-            background-color: #34495e;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        
-        .welcome-section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+        .dashboard-header h1 {
+            font-weight: 700;
         }
         
         .card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .card h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        
-        .ticket-item {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
-        }
-        
-        .ticket-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .ticket-id {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .ticket-status {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-        
-        .status-confirmed {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .status-cancelled {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        .journey-item {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 10px;
-            background-color: #f9f9f9;
-        }
-        
-        .journey-route {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .journey-details {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .btn {
-            background-color: #3498db;
-            color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: background-color 0.3s;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
         }
         
-        .btn:hover {
-            background-color: #2980b9;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
-        .btn-success {
-            background-color: #27ae60;
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+            border-bottom: none;
         }
         
-        .btn-success:hover {
-            background-color: #229954;
+        .badge {
+            font-size: 0.85rem;
+            padding: 0.35em 0.65em;
+            font-weight: 500;
         }
         
-        .quick-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
+        .list-group-item {
+            border-left: none;
+            border-right: none;
+            padding: 1rem 1.25rem;
+            transition: all 0.3s ease;
         }
         
-        .no-data {
+        .list-group-item:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding-left: 1.5rem;
+        }
+        
+        .list-group-item i {
+            width: 24px;
             text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 20px;
+            margin-right: 10px;
+            color: var(--primary-color);
         }
         
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .quick-actions {
-                flex-direction: column;
-            }
+        .btn-outline-primary {
+            border-width: 2px;
+            font-weight: 500;
+        }
+        
+        .admin-badge {
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            color: white;
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .admin-badge i {
+            margin-right: 8px;
+        }
+        
+        .user-info-table th {
+            width: 40%;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .quick-actions-btn {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-actions-btn i {
+            font-size: 1.75rem;
+            margin-bottom: 10px;
+        }
+        
+        .quick-actions-btn:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            transform: translateY(-3px);
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">Train Ticket System</div>
-            <div class="nav-links">
-                <a href="search">Search Trains</a>
-                <a href="dashboard">Dashboard</a>
-                <a href="profile">Profile</a>
-                <a href="logout">Logout</a>
+    <jsp:include page="/WEB-INF/views/common/header.jsp" />
+    
+    <div class="container mt-4">
+        <!-- Messages d'erreur/succès -->
+        <c:if test="${not empty error}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fas fa-exclamation-circle mr-2"></i> ${error}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
             </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <div class="welcome-section">
-            <h2>Welcome back, ${user.fullName}!</h2>
-            <p>Manage your bookings and explore new journeys.</p>
+        </c:if>
+        
+        <!-- Message de bienvenue -->
+        <div class="dashboard-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-4 font-weight-bold">
+                        <i class="fas fa-tachometer-alt mr-3"></i> ${welcomeMessage}
+                    </h1>
+                    <p class="lead mb-0">Bienvenue sur votre tableau de bord personnel</p>
+                </div>
+                <div>
+                    <span class="badge badge-light p-2">
+                        <i class="fas fa-calendar-day mr-2"></i>
+                        <fmt:formatDate value="<%= new java.util.Date() %>" pattern="EEEE dd MMMM yyyy" />
+                    </span>
+                </div>
+            </div>
             
-            <div class="quick-actions">
-                <a href="search" class="btn btn-success">Search New Trains</a>
-                <a href="profile" class="btn">View Profile</a>
-            </div>
+            <c:if test="${isAdmin}">
+                <div class="admin-badge mt-3">
+                    <i class="fas fa-crown"></i>
+                    <span>${adminMessage}</span>
+                    <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-light btn-sm ml-3">
+                        <i class="fas fa-cog mr-1"></i> Panneau d'administration
+                    </a>
+                </div>
+            </c:if>
         </div>
-
-        <div class="dashboard-grid">
-            <!-- My Tickets Section -->
-            <div class="card">
-                <h3>My Tickets</h3>
-                <c:choose>
-                    <c:when test="${not empty userTickets}">
-                        <c:forEach var="ticket" items="${userTickets}">
-                            <div class="ticket-item">
-                                <div class="ticket-header">
-                                    <span class="ticket-id">Ticket #${ticket.id}</span>
-                                    <span class="ticket-status status-${ticket.status.toLowerCase()}">
-                                        ${ticket.status}
+        
+        <!-- Informations utilisateur et actions rapides -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex align-items-center">
+                        <i class="fas fa-user mr-2"></i>
+                        <h5 class="mb-0">Mes Informations</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table user-info-table">
+                            <tr>
+                                <th>Nom d'utilisateur:</th>
+                                <td>${user.username}</td>
+                            </tr>
+                            <tr>
+                                <th>Nom complet:</th>
+                                <td>${user.fullName}</td>
+                            </tr>
+                            <tr>
+                                <th>Email:</th>
+                                <td>${user.email}</td>
+                            </tr>
+                            <tr>
+                                <th>Téléphone:</th>
+                                <td>${not empty user.phone ? user.phone : '<span class="text-muted">Non renseigné</span>'}</td>
+                            </tr>
+                            <tr>
+                                <th>Rôle:</th>
+                                <td>
+                                    <span class="badge badge-${user.role == 'ADMIN' ? 'danger' : user.role == 'EMPLOYEE' ? 'warning' : 'primary'}">
+                                        ${user.role}
                                     </span>
-                                </div>
-                                <div class="ticket-details">
-                                    <p><strong>Passenger:</strong> ${ticket.passengerName}</p>
-                                    <p><strong>Seat:</strong> ${ticket.seatNumber}</p>
-                                    <p><strong>Booking Date:</strong> 
-                                        <fmt:formatDate value="${ticket.bookingDate}" pattern="MMM dd, yyyy" />
-                                    </p>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-data">
-                            <p>No tickets found.</p>
-                            <a href="search" class="btn" style="margin-top: 10px;">Book Your First Ticket</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Membre depuis:</th>
+                                <td>
+                                    <fmt:formatDate value="${user.createdAt}" pattern="dd MMMM yyyy" />
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="${pageContext.request.contextPath}/profile" class="btn btn-primary">
+                                <i class="fas fa-edit mr-2"></i> Modifier mon profil
+                            </a>
                         </div>
-                    </c:otherwise>
-                </c:choose>
+                    </div>
+                </div>
             </div>
-
-            <!-- Available Journeys Section -->
-            <div class="card">
-                <h3>Upcoming Journeys</h3>
-                <c:choose>
-                    <c:when test="${not empty recentJourneys}">
-                        <c:forEach var="journey" items="${recentJourneys}">
-                            <div class="journey-item">
-                                <div class="journey-route">
-                                    ${journey.departureStation.city} → ${journey.arrivalStation.city}
-                                </div>
-                                <div class="journey-details">
-                                    <p><strong>Train:</strong> ${journey.train.trainName}</p>
-                                    <p><strong>Departure:</strong> 
-                                        <fmt:formatDate value="${journey.departureTime}" pattern="MMM dd, yyyy HH:mm" />
-                                    </p>
-                                    <p><strong>Price:</strong> $${journey.price}</p>
-                                    <p><strong>Available Seats:</strong> ${journey.availableSeats}</p>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="no-data">
-                            <p>No upcoming journeys available.</p>
+            
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header bg-success text-white d-flex align-items-center">
+                        <i class="fas fa-bolt mr-2"></i>
+                        <h5 class="mb-0">Actions Rapides</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <a href="${pageContext.request.contextPath}/search" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-search text-primary"></i>
+                                <span>Rechercher des trains</span>
+                                <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/my-tickets" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-ticket-alt text-primary"></i>
+                                <span>Mes billets</span>
+                                <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/booking-history" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-history text-primary"></i>
+                                <span>Historique des réservations</span>
+                                <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/profile" class="list-group-item list-group-item-action d-flex align-items-center">
+                                <i class="fas fa-user-cog text-primary"></i>
+                                <span>Paramètres du compte</span>
+                                <i class="fas fa-chevron-right ml-auto text-muted"></i>
+                            </a>
                         </div>
-                    </c:otherwise>
-                </c:choose>
+                    </div>
+                </div>
             </div>
         </div>
+        
+        <!-- Section statistiques (pour les admins) -->
+        <c:if test="${isAdmin}">
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark d-flex align-items-center">
+                            <i class="fas fa-chart-line mr-2"></i>
+                            <h5 class="mb-0">Accès Rapide Administration</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <a href="${pageContext.request.contextPath}/admin/users" class="quick-actions-btn text-center">
+                                        <i class="fas fa-users text-primary"></i>
+                                        <span class="font-weight-bold">Gestion Utilisateurs</span>
+                                        <small class="text-muted">Gérer les comptes</small>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="${pageContext.request.contextPath}/admin/stations" class="quick-actions-btn text-center">
+                                        <i class="fas fa-map-marker-alt text-success"></i>
+                                        <span class="font-weight-bold">Stations</span>
+                                        <small class="text-muted">Gérer les gares</small>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="${pageContext.request.contextPath}/admin/trains" class="quick-actions-btn text-center">
+                                        <i class="fas fa-train text-info"></i>
+                                        <span class="font-weight-bold">Trains</span>
+                                        <small class="text-muted">Gérer le matériel</small>
+                                    </a>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <a href="${pageContext.request.contextPath}/admin/dashboard" class="quick-actions-btn text-center">
+                                        <i class="fas fa-chart-pie text-warning"></i>
+                                        <span class="font-weight-bold">Statistiques</span>
+                                        <small class="text-muted">Tableau de bord</small>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
     </div>
+    
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Animation pour les cartes au chargement
+        $(document).ready(function() {
+            $('.card').each(function(i) {
+                $(this).delay(i * 100).animate({
+                    opacity: 1
+                }, 400);
+            });
+        });
+    </script>
 </body>
 </html>
